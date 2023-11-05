@@ -3,18 +3,15 @@
 #include <random>
 #include <numeric>
 #include <map>
-void cout_index();
-double abg_computing();
-double moda_computing();
-double mediana_computing();
-void initializeVectors() {
+
+void initializeVectors(std::vector<std::string>& names, std::vector<short>& grades) {
 	short choice;
-	std::vector<std::string> names;
-	std::vector<int> grades;
+
 	std::cout << "Что вы хотите сделать?" << std::endl;
 	std::cout << "Введите 1 для демонстрационного варианта" << std::endl;
 	std::cout << "Введите 2 для случаной инициализации" << std::endl;
 	std::cout << "Введите 3 для самостоятельного ввода" << std::endl;
+	std::cin >> choice;
 	if (choice == 1) {
 		names = { "Antony", "Carmela", "Madow", "Kristopher", "Poly", "Jackie", "Alex", "Frank", "Ralph", "Junior"};
 		grades = { 90, 98, 95, 75, 55, 65, 89, 87, 78, 94 };
@@ -24,7 +21,7 @@ void initializeVectors() {
 		short size;
 		std::cin >> size;
 		std::vector<short> random_grades(size);
-		srand(time(NULL));
+		srand(time(0));
 		for (int i = 0; i < size; i++) {
 			random_grades[i] = rand() % 101;
 			
@@ -77,20 +74,17 @@ void cout_RangeBasedFor(std::vector<std::string>& names, std::vector<short>& gra
 	std::cout << std::endl;
 }
 
+//поменять short на int (если не будет работать)
 
-double avg_computing(std::vector<short>& grades) // note: the average must not be an integer
-{
+double avg_computing(std::vector<short>& grades){ 
 	return grades.empty() ? 0.0 :
-		std::accumulate(grades.begin(), grades.end(), 0.0)) / grades.size();
+		(std::accumulate(grades.begin(), grades.end(), 0.0)) / grades.size();
 }
 
 
 
-
-//поменять short на int (если не будет работать)
-
 double mediana_computing(std::vector<short>& grades) {
-	short size;
+	short size{};
 	if (grades.empty())
 		return 0;
 	std::sort(grades.begin(), grades.end());
@@ -98,36 +92,73 @@ double mediana_computing(std::vector<short>& grades) {
 }
 
 
+//double moda_computing(std::vector<short>& grades) {
+//	short mode = grades[0];
+//	short maxgrade = 1;
+//	std::sort(grades.begin(), grades.end());
+//	short count = 1;
+//	for (int i = 0; i < grades.size(); i++) {
+//		if (grades[i] < grades[i - 1])
+//			count++;
+//		else {
+//			if (count > maxgrade) {
+//				maxgrade = count;
+//				mode = grades[i - 1];
+//
+//			}
+//			count = 1;
+//		}
+//	}
+//	if (count > maxgrade)
+//		mode = grades[grades.size() - 1];
+//	std::cout << "Мода: " << mode << std::endl;
+//	
+//	//std::map <short, short> gradesfreq; //ключи - оценки, значения - кол-во раз, которое они встречаются
+//	//for (short grade : grades) { //перебираю все оценки
+//	//	gradesfreq[grade]++;
+//	//}
+//	//short 
+//}
+
 double moda_computing(std::vector<short>& grades) {
+	if (grades.empty()) {
+		std::cout << "Вектор оценок пуст." << std::endl;
+		return 0;
+	}
+
+	std::sort(grades.begin(), grades.end());
 	short mode = grades[0];
 	short maxgrade = 1;
-	std::sort(grades.begin(), grades.end());
 	short count = 1;
-	for (int i = 0; i < grades.size(); i++) {
-		if (grades[i] < grades[i - 1])
+
+	for (int i = 1; i < grades.size(); i++) {
+		if (grades[i] == grades[i - 1]) {
 			count++;
+		}
 		else {
 			if (count > maxgrade) {
 				maxgrade = count;
 				mode = grades[i - 1];
-
 			}
 			count = 1;
 		}
 	}
-	if (count > maxgrade)
+
+	if (count > maxgrade) {
 		mode = grades[grades.size() - 1];
+	}
+
 	std::cout << "Мода: " << mode << std::endl;
-	//std::map <short, short> gradesfreq; //ключи - оценки, значения - кол-во раз, которое они встречаются
-	//for (short grade : grades) { //перебираю все оценки
-	//	gradesfreq[grade]++;
-	//}
-	//short 
+	return mode;
 }
 
+
 int main() {
-	initializeVectors();
-	short choice; 
+	setlocale(LC_ALL, "RU");
+	std::vector<std::string> names;
+	std::vector<short> grades;
+	short choice;
+	initializeVectors(names, grades);
 	while (true) {
 		std::cout << "1) Вывести векторы методом index" << std::endl;
 		std::cout << "2) Вывести веторы методом Iterator" << std::endl;
@@ -141,12 +172,12 @@ int main() {
 			break;
 		}
 		switch (choice) {
-			case 1: cout_index(); break;
-			case 2:cout_iterator(); break;
-			case 3:cout_RangeBasedFor(); break;
-			case 4:mediana_computing(); break;
-			case 5:moda_computing(); breal;
-			case 6:c
+			case 1: cout_index(names, grades); break;
+			case 2:cout_iterator(names, grades); break;
+			case 3:cout_RangeBasedFor(names, grades); break;
+			case 4:mediana_computing(grades); break;
+			case 5:moda_computing(grades); break;
+			case 6:avg_computing(grades); break;
 				
 		}
 	}
